@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>无法访问 · rainnit</title>
+    <style>
+        :root {
+            --bg: #f5f8fc;
+            --surface: #ffffff;
+            --surface-2: #eaf3ff;
+            --ink: #1c2330;
+            --mut: #55617a;
+            --dim: #8a93a4;
+            --line: #dfe6f0;
+            --accent: #4d9fff;
+            --accent-deep: #2f7fe0;
+            --warn: #f0a020;
+            --radius-lg: 24px;
+            --radius-md: 14px;
+            --radius-full: 999px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: "PingFang SC", "HarmonyOS Sans SC", "MiSans", "Noto Sans SC", sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            min-height: 100vh;
+            min-height: 100svh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+        ::selection { background: var(--accent); color: #fff; }
+
+        /* 背景：浅蓝光晕 + 极淡网格（V3.0 风格但克制） */
+        .bg { position: fixed; inset: 0; z-index: 0; pointer-events: none;
+            background:
+                radial-gradient(46vmax 40vmax at 14% 10%, rgba(77,159,255,.12), transparent 60%),
+                radial-gradient(44vmax 40vmax at 88% 88%, rgba(123,184,255,.10), transparent 60%),
+                linear-gradient(180deg, #f7faff 0%, #f2f6fc 100%); }
+        .bg::after { content: ""; position: absolute; inset: 0; opacity: .6;
+            background:
+                linear-gradient(rgba(77,159,255,.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(77,159,255,.05) 1px, transparent 1px);
+            background-size: 64px 64px; }
+
+        /* 警示卡片 */
+        .card {
+            position: relative; z-index: 1;
+            max-width: 540px; width: 100%;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-lg);
+            box-shadow: 0 20px 44px -18px rgba(64,110,170,.26), 0 8px 16px -6px rgba(64,110,170,.10);
+            padding: 52px 46px 44px;
+            text-align: center;
+            animation: rise .7s cubic-bezier(.2,.7,.3,1) both;
+        }
+        @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+
+        /* 加载视图：探测主站期间显示 */
+        .spinner {
+            width: 58px; height: 58px;
+            margin: 6px auto 30px;
+            border-radius: 50%;
+            border: 4px solid var(--surface-2);
+            border-top-color: var(--accent);
+            animation: spin .9s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .load-title {
+            font-size: clamp(24px, 5vw, 30px);
+            font-weight: 800;
+            letter-spacing: .02em;
+            color: var(--ink);
+        }
+        .load-sub { margin-top: 10px; color: var(--mut); font-size: 15px; }
+
+        /* 警示图标：三角 + 感叹号（轻微浮动） */
+        .icon {
+            width: 64px; height: 64px;
+            margin: 0 auto 22px;
+            display: flex; align-items: center; justify-content: center;
+            animation: floaty 3.2s ease-in-out infinite alternate;
+        }
+        .icon svg { width: 100%; height: 100%; }
+        @keyframes floaty { from { translate: 0 0; } to { translate: 0 -8px; } }
+
+        h1 {
+            font-size: clamp(26px, 5vw, 34px);
+            font-weight: 800;
+            letter-spacing: .01em;
+            line-height: 1.3;
+            color: var(--ink);
+        }
+
+        /* 文本框：该网站仅支持 IPv6 连接 */
+        .box {
+            display: inline-block;
+            margin-top: 22px;
+            padding: 10px 20px;
+            background: var(--surface-2);
+            border: 1px solid rgba(77,159,255,.4);
+            border-radius: var(--radius-md);
+            color: var(--accent-deep);
+            font-weight: 600;
+            font-size: 15px;
+            letter-spacing: .04em;
+        }
+
+        .hint {
+            margin-top: 20px;
+            color: var(--mut);
+            font-size: 15px;
+        }
+        .hint b { color: var(--accent-deep); font-weight: 600; }
+
+        .divider { margin: 28px auto 22px; max-width: 220px; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: .55; }
+
+        .retry-line { color: var(--dim); font-size: 13.5px; letter-spacing: .02em; }
+
+        /* 重试按钮 */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 18px;
+            padding: 14px 42px;
+            border: 1px solid var(--accent);
+            border-radius: var(--radius-full);
+            background: var(--accent);
+            color: #fff;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: .14em;
+            text-indent: .14em;
+            text-decoration: none;
+            cursor: pointer;
+            box-shadow: 0 14px 30px -12px rgba(77,159,255,.5);
+            transition: transform .25s, box-shadow .3s, background .25s;
+        }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 18px 36px -12px rgba(77,159,255,.6); background: var(--accent-deep); }
+        .btn:active { transform: translateY(-1px) scale(.97); }
+
+        .foot { margin-top: 30px; color: var(--dim); font-size: 12px; letter-spacing: .14em; }
+
+        /* 手机端 */
+        @media (max-width: 480px) {
+            .card { padding: 40px 24px 36px; border-radius: 20px; }
+            h1 { font-size: 24px; }
+            .box { font-size: 14px; }
+        }
+
+        /* 减少动态偏好 */
+        @media (prefers-reduced-motion: reduce) {
+            .card, .icon, .spinner { animation: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg" aria-hidden="true"></div>
+
+    <main class="card">
+        <!-- 加载视图：默认显示，探测主站期间 -->
+        <div id="viewLoading">
+            <div class="spinner" aria-hidden="true"></div>
+            <p class="load-title">正在检测网络连接</p>
+            <p class="load-sub">请稍候</p>
+        </div>
+
+        <!-- 警告视图：探测失败后显示 -->
+        <div id="viewWarning" hidden>
+            <div class="icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64" fill="none">
+                    <path d="M32 6 L58 52 H6 Z" fill="#f5b94a" stroke="#e89b2a" stroke-width="2.5" stroke-linejoin="round"/>
+                    <rect x="29.6" y="24" width="4.8" height="14" rx="2.4" fill="#fff"/>
+                    <circle cx="32" cy="45" r="2.8" fill="#fff"/>
+                </svg>
+            </div>
+
+            <h1>您的访问无法到达</h1>
+
+            <span class="box">该网站仅支持IPv6连接</span>
+
+            <p class="hint">请连接支持<b>IPv6</b>的WiFi，或者使用<b>移动数据</b>访问</p>
+
+            <div class="divider"></div>
+
+            <p class="retry-line">如果您已经切换网络请点击重试</p>
+            <a class="btn" id="retryBtn" href="https://rainnit.com.cn:9000">重试</a>
+
+            <p class="foot">RAINNIT</p>
+        </div>
+    </main>
+    <script>
+        // 主站地址（需为 https，且 DNS 有 AAAA 记录指向服务器）
+        var TARGET = 'https://rainnit.com.cn:9000';
+        var TIMEOUT = 4000;
+
+        (function () {
+            var retry = document.getElementById('retryBtn');
+            if (retry) { retry.href = TARGET; }
+
+            var controller = new AbortController();
+            var timer = setTimeout(function () { controller.abort(); }, TIMEOUT);
+
+            fetch(TARGET, { mode: 'no-cors', cache: 'no-store', signal: controller.signal })
+                .then(function () {
+                    clearTimeout(timer);
+                    location.href = TARGET;
+                })
+                .catch(function () {
+                    clearTimeout(timer);
+                    document.getElementById('viewLoading').hidden = true;
+                    document.getElementById('viewWarning').hidden = false;
+                });
+        })();
+    </script>
+</body>
+</html>
